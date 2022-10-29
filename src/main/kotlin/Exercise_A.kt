@@ -14,12 +14,8 @@ private fun getCargoList(args: Array<String>): List<String> {
         inputList = File(args[0]).readLines().toMutableList()
     } else {
         val cargoCount = readLine()?.toInt() ?: 0
-        if (cargoCount != 0) {
-            for (i in 0..cargoCount) {
-                readLine()?.let { inputList.add(it) }
-            }
-        } else {
-            throw IllegalArgumentException("No arguments found")
+        for (i in 0..cargoCount) {
+            readLine()?.let { inputList.add(it) }
         }
     }
     return inputList.toList()
