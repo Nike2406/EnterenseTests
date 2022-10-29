@@ -13,7 +13,15 @@ fun main(args: Array<String>) {
     val rawData: List<String> = parseInputData(args)
     val inputInfo: InputInfo = parseInfo(rawData)
     val employees: Array<Employer> = parseEmployer(inputInfo, rawData)
+
+    val sortedByDescendingProfit: List<Employer> = employees.copyOf()
+        .sortedDescending()
+        .toList()
+
     println(employees.contentToString())
+    employees.sortByDescending{it.profit}
+    println(employees.contentToString())
+
 }
 
 fun parseInputData(args: Array<String>): List<String> {
@@ -25,7 +33,7 @@ fun parseInputData(args: Array<String>): List<String> {
         val firstLine = readLine() ?: ""
         inputList1.add(firstLine)
         val linesCount = firstLine.split(" ")[1].toInt()
-        for (i in 0 until  linesCount) {
+        for (i in 0 until linesCount) {
             readLine()?.let { inputList1.add(it) }
         }
     }
@@ -49,7 +57,7 @@ fun parseEmployer(
     rawData: List<String>
 ): Array<Employer> {
     val employerArr: Array<Employer> = Array(inputInfo.employersCount) {
-        Employer(-1, -1, -1)
+        Employer(-1, -1, -1, -1)
     }
     var tempEmployerData: List<Int>
     for (i in 0 until inputInfo.employersCount) {
@@ -57,15 +65,16 @@ fun parseEmployer(
         tempEmployerData = getEmployerData(rawData[i + 1])
         employerArr[i].pricePerWeek = tempEmployerData[0]
         employerArr[i].weeksCount = tempEmployerData[1]
+        employerArr[i].profit = tempEmployerData[0] * tempEmployerData[1]
     }
     return employerArr
 }
 
 private fun getEmployerData(str: String): List<Int> {
-     val tempArr = str.split(" ")
-         .map {
-        it.toInt()
-    }
+    val tempArr = str.split(" ")
+        .map {
+            it.toInt()
+        }
     return tempArr
 }
 
@@ -79,5 +88,21 @@ data class Employer(
     var id: Int,
     var pricePerWeek: Int,
     var weeksCount: Int,
+    var profit: Int,
+) : Comparable<Employer> {
+    override fun compareTo(other: Employer): Int {
+        return if (this.profit > other.profit)
+            1
+        else if (this.profit < other.profit)
+            -1
+        else
+            0
+    }
+}
+
+data class Billboard(
+    val id: Int,
+    val setOfCurrentEmployees: Set<Employer>,
+    val freeWeeks: Int,
 )
 
