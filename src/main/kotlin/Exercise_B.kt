@@ -1,5 +1,4 @@
 import java.io.File
-import java.util.Arrays
 
 /*
 * 1str: n, k, w
@@ -24,7 +23,7 @@ fun parseEmployer(
     val employerArr: Array<Employer> = Array(inputInfo.employersCount) {
         Employer(-1, -1, -1)
     }
-    var tempEmployerData = listOf<Int>()
+    var tempEmployerData: List<Int>
     for (i in 0 until inputInfo.employersCount) {
         employerArr[i].id = i
         tempEmployerData = getEmployerData(rawData[i + 1])
@@ -48,8 +47,10 @@ fun parseData(args: Array<String>): List<String> {
     if (args.size == 1) {
         inputList1 = File(args[0]).readLines().toMutableList()
     } else {
-        val linesCount = readLine()?.toInt() ?: 0
-        for (i in 0..linesCount) {
+        val firstLine = readLine() ?: ""
+        inputList1.add(firstLine)
+        val linesCount = firstLine.split(" ")[1].toInt()
+        for (i in 0 until  linesCount) {
             readLine()?.let { inputList1.add(it) }
         }
     }
